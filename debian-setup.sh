@@ -2,19 +2,16 @@
 sudo apt-get update
 sudo apt-get install wget apt-transport-https software-properties-common gnupg git jq xorriso lsb-release -y
 
-# Download the Microsoft repository GPG keys
-wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb"
-# Register the Microsoft repository GPG keys
-sudo dpkg -i packages-microsoft-prod.deb
-# Delete the the Microsoft repository GPG keys file
-rm packages-microsoft-prod.deb
-# Update the list of packages after we added packages.microsoft.com
-sudo apt-get update
+
 # Install PowerShell
-sudo apt-get install -y powershell
+wget https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/powershell_7.4.1-1.deb_amd64.deb
+sudo dpkg -i powershell_7.4.1-1.deb_amd64.deb
+# Resolve missing dependencies and finish the install (if necessary)
+sudo apt-get install  -f
+rm powershell_7.4.1-1.deb_amd64.deb
 
 # Install system dependencies
-apt-get update
+apt-get update 
 apt-get install -y curl unzip git sudo nano make ruby ruby-dev build-essential libx11-xcb1 libxcb-dri3-0 libdrm2 libgbm1 libxshmfence1 libasound2 bash-completion apt-transport-https ca-certificates gnupg lsb-release python3 python3-pip dos2unix whois
 apt-get install -y locate
 # Prettify the bash terminal, Clone nord dircolors repository
@@ -26,11 +23,11 @@ cp nord-dircolors/src/dir_colors ~/.dircolors && \
 
 # Add Docker’s official GPG key
 sudo install -m 0755 -d /etc/apt/keyrings && \
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
     sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
 # Add Docker's repository
-echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 # Install Docker CLI
 apt-get update && \

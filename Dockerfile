@@ -74,7 +74,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get install -y nodejs
 
 # Install code-server
-ARG CODE_SERVER_VERSION="3.12.0"
+ARG CODE_SERVER_VERSION="4.22.1"
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=${CODE_SERVER_VERSION}
 
 # Install extensions
